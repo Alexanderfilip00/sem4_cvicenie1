@@ -28,8 +28,8 @@ public:
 	void setFreeDrawActivated(bool state) { freeDrawActivated = state; }
 	bool getFreeDrawActivated() { return freeDrawActivated; }
 	void VykresliOsi(int Hustota);
-	void KresliSinus(int N, int Hustota, int Rezim);
-	void KresliKosinus(int N, int Hustota, int Rezim);
+	void KresliFunkciu(int N, int Hustota, int Rezim);
+
 
 	//Get/Set functions
 	QString getName() { return name; }

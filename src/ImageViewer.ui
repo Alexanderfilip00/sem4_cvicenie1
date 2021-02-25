@@ -161,7 +161,7 @@
                <number>50</number>
               </property>
               <property name="singleStep">
-               <number>2</number>
+               <number>1</number>
               </property>
               <property name="stepType">
                <enum>QAbstractSpinBox::DefaultStepType</enum>
@@ -186,7 +186,7 @@
              <number>50</number>
             </property>
             <property name="singleStep">
-             <number>2</number>
+             <number>1</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -253,7 +253,7 @@
      <x>0</x>
      <y>0</y>
      <width>1098</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

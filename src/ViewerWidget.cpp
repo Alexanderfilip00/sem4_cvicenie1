@@ -114,24 +114,26 @@ void ViewerWidget::VykresliOsi(int Hustota) {
 	QPoint C3;
 	QPoint C4;
 	
-	for (i = 0; i < Hustota / 2; i++) {				//drazka najdalej je od stredu vo vzdialenosti x_stred - x1   ;   y_stred - y1
-		C1.setX(areaSize.width() - x1 - round(i * x_dielik));
-		C1.setY(x_vrch);
-		C2.setX(areaSize.width() - x1 - round(i * x_dielik));
-		C2.setY(x_spodok);
-		painter->drawLine(C1, C2);
+	for (i = 0; i <= Hustota; i++) {				//drazka najdalej je od stredu vo vzdialenosti x_stred - x1   ;   y_stred - y1
+		//C1.setX(areaSize.width() - x1 - round(i * x_dielik));
 		C1.setX(x1 + i * x_dielik);
 		C2.setX(x1 + i * x_dielik);
+		C1.setY(x_vrch);
+		//C2.setX(areaSize.width() - x1 - round(i * x_dielik));
+		C2.setY(x_spodok);
 		painter->drawLine(C1, C2);
+		
+		//painter->drawLine(C1, C2);
 
-		C3.setX(y_vlavo);
-		C3.setY(areaSize.height() - y2 - round(i * y_dielik));
-		C4.setX(y_vpravo);
-		C4.setY(areaSize.height() - y2 - round(i * y_dielik));
-		painter->drawLine(C3, C4);
 		C3.setY(y2 + i * y_dielik);
 		C4.setY(y2 + i * y_dielik);
+		C3.setX(y_vlavo);
+		//C3.setY(areaSize.height() - y2 - round(i * y_dielik));
+		C4.setX(y_vpravo);
+		//C4.setY(areaSize.height() - y2 - round(i * y_dielik));
 		painter->drawLine(C3, C4);
+
+		//painter->drawLine(C3, C4);
 	}
 
 	QPoint D1(B1.x(), B1.y() - (B1.y() / (zlomok * 2)));		//body pre napisanie "x" a "y"
@@ -148,10 +150,10 @@ void ViewerWidget::VykresliOsi(int Hustota) {
 	update();
 }
 
-void ViewerWidget::KresliSinus(int N, int Hustota, int Rezim){
+void ViewerWidget::KresliFunkciu(int N, int Hustota, int Rezim){
 	double* HodnotyFcie = new double[Hustota+1];		//vytvorim si staticke pole pre hodnoty fcie
 	int i;
-	double dielik = N * M_PI / Hustota;
+	double dielik = (N*2) * M_PI / Hustota;
 	int zlomok = 22;
 
 	QPen pero;
@@ -159,98 +161,43 @@ void ViewerWidget::KresliSinus(int N, int Hustota, int Rezim){
 	pero.setColor("red");
 	painter->setPen(pero);
 
-	for (i = 0; i < Hustota + 1; i++) {
-		HodnotyFcie[i] = qSin(i * dielik);
+	if (Rezim > 2) {
+		for (i = 0; i <= Hustota; i++) {
+			HodnotyFcie[i] = qCos((-Hustota * dielik) / 2 + i * dielik);
+		}
+	}
+	else {
+		for (i = 0; i <= Hustota; i++) {
+			HodnotyFcie[i] = qSin((-Hustota * dielik) / 2 + i * dielik);
+		}
 	}
 	
-	if (Rezim == 0) {
+	if (Rezim % 3 == 0) {
 		for (i = 0; i <= Hustota; i++) {
-			painter->drawPoint(round(areaSize.width() / 2 + i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota)) , round((areaSize.height() / 2) - (HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok)))));
-			painter->drawPoint(round(areaSize.width() / 2 - i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota)) , round((areaSize.height() / 2) + HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
+			int x = round(areaSize.width() / zlomok + i * ((areaSize.width() - 2.0*((double)areaSize.width() / zlomok)) / Hustota));
+			int y = round((areaSize.height() / 2) - (HodnotyFcie[i] * ((areaSize.height() / 2.0) - ((double)areaSize.height() / zlomok))));
+			painter->drawPoint(x,y);
 		}
 	}
-	else if (Rezim == 1) {
+	else if (Rezim % 3 == 1) {
 		for (i = 0; i < Hustota; i++) {
-			int X1= round(areaSize.width() / 2 + i * (((areaSize.width() / 2.0) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Y1= round((areaSize.height() / 2) - (HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
-			int X2= round(areaSize.width() / 2 + (i+1) * (((areaSize.width() / 2.0) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Y2= round((areaSize.height() / 2) - (HodnotyFcie[i+1] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
+			int X1= round(areaSize.width() / zlomok + i * ((areaSize.width() - 2.0*((double)areaSize.width() / zlomok)) / Hustota));
+			int Y1= round((areaSize.height() / 2.0) - (HodnotyFcie[i] * ((areaSize.height() / 2.0) - ((double)areaSize.height() / zlomok))));
+			int X2= round(areaSize.width() / zlomok + (i+1) * ((areaSize.width() - 2.0*((double)areaSize.width() / zlomok)) / Hustota));
+			int Y2= round((areaSize.height() / 2.0) - (HodnotyFcie[i+1] * ((areaSize.height() / 2.0) - ((double)areaSize.height() / zlomok))));
 
-			int X3 = round(areaSize.width() / 2 - i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Y3 = round((areaSize.height() / 2) + (HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
-			int X4 = round(areaSize.width() / 2 - (i + 1) * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Y4 = round((areaSize.height() / 2) + (HodnotyFcie[i + 1] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
 			painter->drawLine(X1, Y1, X2, Y2);
-			painter->drawLine(X3, Y3, X4, Y4);
 		}
 	}
 	else {
-		for (i = 0; i < Hustota; i++) {
-			int X1 = round(areaSize.width() / 2 + i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int X3 = round(areaSize.width() / 2 - i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Sirka1 = (((areaSize.width() / 2) - (areaSize.width() / zlomok)) / Hustota);
+		for (i = 0; i <= Hustota; i++) {
+			int X1 = round(areaSize.width() / zlomok + i * ((areaSize.width() - 2.0*((double)areaSize.width() / zlomok)) / Hustota) - areaSize.width()/(Hustota*2));
+			int Sirka1 = round(((areaSize.width() - 2.0*(areaSize.width() / zlomok)) / Hustota));
 			int Vyska1 = round(-HodnotyFcie[i] * ((areaSize.height() / 2) - (areaSize.height() / zlomok)));
 
 			QBrush mojbrush("red");
 			painter->drawRect(X1, areaSize.height() / 2, Sirka1, Vyska1);
-			painter->drawRect(X3, areaSize.height() / 2, -Sirka1, -Vyska1);
 			painter->fillRect(X1, areaSize.height() / 2, Sirka1, Vyska1,mojbrush);
-			painter->fillRect(X3, areaSize.height() / 2, -Sirka1, -Vyska1,mojbrush);
-		}
-	}
-
-	delete[] HodnotyFcie;
-	update();
-}
-
-void ViewerWidget::KresliKosinus(int N, int Hustota, int Rezim) {
-	double* HodnotyFcie = new double[Hustota + 1];		//vytvorim si staticke pole pre hodnoty fcie
-	int i;
-	double dielik = N * M_PI / Hustota;
-	int zlomok = 22;
-
-	QPen pero;
-	pero.setWidth(5);
-	pero.setColor("red");
-	painter->setPen(pero);
-
-	for (i = 0; i < Hustota + 1; i++) {
-		HodnotyFcie[i] = qCos(i * dielik);
-	}
-
-	if (Rezim == 0) {
-		for (i = 0; i <= Hustota; i++) {
-			painter->drawPoint(round(areaSize.width() / 2 + i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota)), round((areaSize.height() / 2) - (HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok)))));
-			painter->drawPoint(round(areaSize.width() / 2 - i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota)), round((areaSize.height() / 2) - HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
-		}
-	}
-	else if (Rezim == 1) {
-		for (i = 0; i < Hustota; i++) {
-			int X1 = round(areaSize.width() / 2 + i * (((areaSize.width() / 2.0) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Y1 = round((areaSize.height() / 2) - (HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
-			int X2 = round(areaSize.width() / 2 + (i + 1) * (((areaSize.width() / 2.0) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Y2 = round((areaSize.height() / 2) - (HodnotyFcie[i + 1] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
-
-			int X3 = round(areaSize.width() / 2 - i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			//int Y3 = round((areaSize.height() / 2) + (HodnotyFcie[i] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
-			int X4 = round(areaSize.width() / 2 - (i + 1) * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			//int Y4 = round((areaSize.height() / 2) + (HodnotyFcie[i + 1] * ((areaSize.height() / 2) - ((double)areaSize.height() / zlomok))));
-			painter->drawLine(X1, Y1, X2, Y2);
-			painter->drawLine(X3, Y1, X4, Y2);
-		}
-	}
-	else {
-		for (i = 0; i < Hustota; i++) {
-			int X1 = round(areaSize.width() / 2 + i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int X3 = round(areaSize.width() / 2 - i * (((areaSize.width() / 2) - ((double)areaSize.width() / zlomok)) / Hustota));
-			int Sirka1 = (((areaSize.width() / 2) - (areaSize.width() / zlomok)) / Hustota);
-			int Vyska1 = round(-HodnotyFcie[i] * ((areaSize.height() / 2) - (areaSize.height() / zlomok)));
-
-			QBrush mojbrush("red");
-			painter->drawRect(X1, areaSize.height() / 2, Sirka1, Vyska1);
-			painter->drawRect(X3, areaSize.height() / 2, -Sirka1, Vyska1);
-			painter->fillRect(X1, areaSize.height() / 2, Sirka1, Vyska1, mojbrush);
-			painter->fillRect(X3, areaSize.height() / 2, -Sirka1, Vyska1, mojbrush);
 		}
 	}
 

@@ -281,15 +281,14 @@ void ImageViewer::on_ButtonVykreslit_clicked()
 	else if (ui->ButtonCiar->isChecked()) rezim = 1;
 	else rezim = 2;
 
-	if (ui->ButtonCos->isChecked()) getCurrentViewerWidget()->KresliKosinus(ui->spinRozsah->value(), ui->spinHustota->value(), rezim);
-	else {
-		getCurrentViewerWidget()->KresliSinus(ui->spinRozsah->value(), ui->spinHustota->value(), rezim);
+	if (ui->ButtonCos->isChecked())
+	{
+		rezim += 3;
 	}
-
+	getCurrentViewerWidget()->KresliFunkciu(ui->spinRozsah->value(), ui->spinHustota->value(), rezim);
 	getCurrentViewerWidget()->VykresliOsi(ui->spinHustota->value());
 	
 }
-
 void ImageViewer::on_ButtonVycistit_clicked()
 {
 	getCurrentViewerWidget()->clear();
@@ -297,16 +296,16 @@ void ImageViewer::on_ButtonVycistit_clicked()
 }
 void ImageViewer::on_sliderHustota_valueChanged()
 {
-	if (ui->sliderHustota->value() % 2 == 1) {
+	/*if (ui->sliderHustota->value() % 2 == 1) {
 		ui->sliderHustota->setValue(ui->sliderHustota->value() + 1);
-	}
+	}*/
 	ui->spinHustota->setValue(ui->sliderHustota->value());
 }
 void ImageViewer::on_spinHustota_valueChanged(int)
 {
-	if (ui->spinHustota->value() % 2 == 1) {
+	/*if (ui->spinHustota->value() % 2 == 1) {
 		ui->spinHustota->setValue(ui->spinHustota->value() + 1);
-	}
+	}*/
 	ui->sliderHustota->setValue(ui->spinHustota->value());
 }
 void ImageViewer::on_sliderRozsah_valueChanged()
